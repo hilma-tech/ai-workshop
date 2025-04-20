@@ -1,6 +1,6 @@
-# react-query-todos
+# AI Workshop
 
-A minimal project for learning about react query
+A minimal project for learning about LLMs and prompt engineering.
 
 ## Installation
 
