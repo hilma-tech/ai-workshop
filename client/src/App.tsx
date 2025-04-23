@@ -1,11 +1,10 @@
-import { Todos } from "./components/Todos";
+import ChatInterface from "./components/ChatInterface";
 
 function App() {
   return (
-    <>
-      <h1>TODOs</h1>
-      <Todos />
-    </>
+    <div className="page-container">
+      <ChatInterface />
+    </div>
   );
 }
 
