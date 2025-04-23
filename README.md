@@ -10,7 +10,7 @@ To install dependencies, run the following command in `server` and in `client`:
 npm install
 ```
 
-Make sure you have MySQL installed and running on your computer, with a database called `testing_todos`.
+Make sure you have MySQL installed and running on your computer, with a database called `ai_workshop`.
 
 ## Running
 

@@ -1,7 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { TodoModule } from "./todo/todo.module";
 import { getOptions } from "./data-source";
 import { LoggerMiddleware } from "./logger/logger.middleware";
 
@@ -15,7 +14,6 @@ import { LoggerMiddleware } from "./logger/logger.middleware";
       ],
     }),
     TypeOrmModule.forRootAsync({ useFactory: getOptions }),
-    TodoModule,
   ],
   controllers: [],
   providers: [],
