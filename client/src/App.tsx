@@ -1,10 +1,7 @@
-import { Todos } from "./components/Todos";
-
 function App() {
   return (
     <>
-      <h1>TODOs</h1>
-      <Todos />
+      <h1>Hello World!</h1>
     </>
   );
 }
