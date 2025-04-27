@@ -1,8 +1,10 @@
+import ChatInterface from "./components/ChatInterface";
+
 function App() {
   return (
-    <>
-      <h1>Hello World!</h1>
-    </>
+    <div className="page-container">
+      <ChatInterface />
+    </div>
   );
 }
 
