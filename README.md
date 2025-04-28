@@ -7,6 +7,7 @@ A minimal project for learning about LLMs and prompt engineering.
 To install dependencies, run the following command in `server` and in `client`:
 
 ```bash
+nvm use
 npm install
 ```
 
