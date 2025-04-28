@@ -11,20 +11,7 @@ interface Message {
 }
 
 const ChatInterface = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      text: "Hello! How can I help you today?",
-      isSent: false,
-      timestamp: new Date(),
-    },
-    {
-      id: 2,
-      text: "I have a question about the service.",
-      isSent: true,
-      timestamp: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
 
   const handleSend = () => {
