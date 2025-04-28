@@ -1,6 +1,8 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class InsertMessages1745830162507 implements MigrationInterface {
+export class InsertMessages1745844579884 implements MigrationInterface {
+  name = "InsertMessages1745844579884";
+
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       `INSERT INTO \`message\` (\`text\`, \`isSent\`) VALUES (?,?), (?,?), (?,?), (?,?), (?,?)`,
@@ -20,12 +22,15 @@ export class InsertMessages1745830162507 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DELETE FROM \`message\` WHERE \`text\` IN (?,?)`, [
-      "Hello, how can I help you?",
-      "I am looking for a new laptop.",
-      "What are the specifications you are looking for?",
-      "I need something lightweight and portable.",
-      "Do you have a budget in mind?",
-    ]);
+    await queryRunner.query(
+      `DELETE FROM \`message\` WHERE \`text\` IN (?,?,?,?,?)`,
+      [
+        "Hello, how can I help you?",
+        "I am looking for a new laptop.",
+        "What are the specifications you are looking for?",
+        "I need something lightweight and portable.",
+        "Do you have a budget in mind?",
+      ]
+    );
   }
 }

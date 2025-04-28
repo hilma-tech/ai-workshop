@@ -11,8 +11,8 @@
     "start:dev": "export NODE_ENV=development && nest start --watch",
     "start:debug": "export NODE_ENV=debug && nest start --debug --watch",
     "start:prod": "export NODE_ENV=production && node dist/main",
-    "migration:generate": "export MIGRATION=on && typeorm-ts-node-esm migration:generate -d ./src/data-source.ts",
-    "migration:up": "export MIGRATION=on && typeorm-ts-node-esm migration:run -d ./src/data-source.ts",
+    "migration:generate": "export MIGRATION=on && typeorm-ts-node-commonjs migration:generate -d ./src/data-source.ts",
+    "migration:up": "export MIGRATION=on && typeorm-ts-node-commonjs migration:run -d ./src/data-source.ts",
     "migration:down": "export MIGRATION=on && typeorm-ts-node-commonjs migration:revert -d ./src/data-source.ts"
   },
   "dependencies": {
