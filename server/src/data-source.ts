@@ -2,16 +2,15 @@ import { config } from "dotenv";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { DataSource, DataSourceOptions } from "typeorm";
-import { privateSecret } from "./setEnv";
 
 export function getOptions(): DataSourceOptions {
   return {
     type: "mysql",
-    host: privateSecret.mysqlSecret.host,
-    port: Number(privateSecret.mysqlSecret.port),
-    database: privateSecret.mysqlSecret.dbname,
-    username: privateSecret.mysqlSecret.username,
-    password: privateSecret.mysqlSecret.password,
+    host: process.env.host,
+    port: Number(process.env.DB_PORT),
+    database: process.env.DB_NAME,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
     logging: process.env.TYPEORM_LOGGING?.toLowerCase() === "on",
     synchronize: process.env.TYPEORM_SYNC?.toLowerCase() === "on",
 
@@ -31,4 +30,6 @@ export function getOptions(): DataSourceOptions {
 if (process.env.MIGRATION) {
   config({ path: join(__dirname, "../.env.development") });
 }
-export const dataSource = process.env.MIGRATION ? new DataSource(getOptions()) : {};
+export const dataSource = process.env.MIGRATION
+  ? new DataSource(getOptions())
+  : {};
