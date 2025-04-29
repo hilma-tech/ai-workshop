@@ -15,7 +15,11 @@ export class MessageService {
   }
 
   async createMessage(text: string): Promise<Message> {
-    const newMessage = this.messageRepository.create({ text, isSent: true });
+    const newMessage = this.messageRepository.create({
+      text,
+      isSent: true,
+      timestamp: new Date(),
+    });
     return await this.messageRepository.save(newMessage);
   }
 }

@@ -23,36 +23,13 @@ const ChatInterface = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
 
-  const handleSend = () => {
-    if (newMessage.trim()) {
-      setMessages([
-        ...messages,
-        {
-          id: messages.length + 1,
-          text: newMessage,
-          isSent: true,
-          timestamp: new Date(),
-        },
-      ]);
-      setNewMessage("");
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-    }
-  };
-
-  const fetchMessages = async (
-    setMessages: React.Dispatch<React.SetStateAction<Message[]>>
-  ) => {
+  // Fetch messages from the server
+  const fetchMessages = async () => {
     try {
       const response = await axios.get("/api/message");
       const parsedMessages = response.data.map((msg: any) => ({
         ...msg,
-        timestamp: new Date(msg.timestamp), // Ensure timestamp is a Date object
+        timestamp: new Date(msg.timestamp),
       }));
       setMessages(parsedMessages);
     } catch (error) {
@@ -60,8 +37,29 @@ const ChatInterface = () => {
     }
   };
 
+  // Send new message to the server
+  const handleSend = async () => {
+    if (newMessage.trim()) {
+      try {
+        await axios.post("/api/message", { text: newMessage });
+        setNewMessage("");
+        fetchMessages(); // Fetch updated messages from server after sending
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
+    }
+  };
+
+  // Handle Enter key press
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
   useEffect(() => {
-    fetchMessages(setMessages);
+    fetchMessages();
   }, []);
 
   return (
@@ -95,7 +93,7 @@ const ChatInterface = () => {
             color="primary"
             className="send-button"
           >
-            <Send color="black" className="send-icon" />
+            <Send className="send-icon" />
           </IconButton>
         </Box>
       </Paper>
