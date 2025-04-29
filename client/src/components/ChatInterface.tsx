@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MessageCircle, Send } from "lucide-react";
 import MessageBubble from "./MessageBubble";
 import "../styles/chat.css";
+import axios from "axios";
 
 interface Message {
   id: number;
@@ -35,6 +36,22 @@ const ChatInterface = () => {
       handleSend();
     }
   };
+
+  const fetchMessages = async (
+    setMessages: React.Dispatch<React.SetStateAction<Message[]>>
+  ) => {
+    try {
+      const response = await axios.get("https://your-api-endpoint/messages"); // Replace with your actual API URL
+      setMessages(response.data);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
+  // Use useEffect to call the function when the component mounts
+  useEffect(() => {
+    fetchMessages(setMessages);
+  }, []);
 
   return (
     <div className="chat-container">
