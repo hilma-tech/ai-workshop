@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MessageCircle, Send } from "lucide-react";
 import MessageBubble from "./MessageBubble";
 import "../styles/chat.css";
+import axios from "axios"; // Import axios
 
 interface Message {
   id: number;
@@ -14,18 +15,41 @@ const ChatInterface = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
 
+  // Function to fetch messages from the backend
+  const fetchMessages = async () => {
+    try {
+      const response = await axios.get<Message[]>("/api/messages"); // Adjust URL as needed
+      // Format the timestamp to be a Date object
+      const formattedMessages = response.data.map((message) => ({
+        ...message,
+        timestamp: new Date(message.timestamp),
+      }));
+      setMessages(formattedMessages);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
+  // Fetch messages when the component mounts
+  useEffect(() => {
+    fetchMessages();
+  }, []); // Empty dependency array means this effect runs once on mount
+
   const handleSend = () => {
     if (newMessage.trim()) {
+      // This part currently adds the message to the local state.
+      // For a full implementation, you would also send this message to the backend here.
       setMessages([
         ...messages,
         {
-          id: messages.length + 1,
+          id: messages.length + 1, // This ID is temporary; backend should assign the final ID
           text: newMessage,
-          isSent: true,
+          isSent: true, // Assuming messages sent from the client are 'isSent: true'
           timestamp: new Date(),
         },
       ]);
       setNewMessage("");
+      // TODO: Add logic here to send the new message to your NestJS backend
     }
   };
 

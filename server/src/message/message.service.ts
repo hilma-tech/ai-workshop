@@ -1,12 +1,18 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Message } from "src/entities/message.entity";
 import { Repository } from "typeorm";
+import { Message } from "../entities/message.entity";
 
 @Injectable()
 export class MessageService {
   constructor(
     @InjectRepository(Message)
-    private readonly messageRepository: Repository<Message>
+    private messagesRepository: Repository<Message>
   ) {}
+
+  async findAll(): Promise<Message[]> {
+    return this.messagesRepository.find();
+  }
+
+  // ... other service methods
 }
