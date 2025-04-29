@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { MessageCircle, Send } from "lucide-react";
 import MessageBubble from "./MessageBubble";
-import "../styles/chat.css";
 import axios from "axios";
+import {
+  Container,
+  Paper,
+  Typography,
+  Box,
+  TextField,
+  IconButton,
+} from "@mui/material";
+import "./chat-interface.scss";
 
 interface Message {
   id: number;
@@ -52,39 +60,46 @@ const ChatInterface = () => {
     }
   };
 
-  // Use useEffect to call the function when the component mounts
   useEffect(() => {
     fetchMessages(setMessages);
   }, []);
 
   return (
-    <div className="chat-container">
-      <div className="chat-header">
-        <MessageCircle className="w-6 h-6" />
-        <h1>Chat</h1>
-      </div>
+    <Container maxWidth="sm" className="chat-container">
+      <Paper elevation={3} className="chat-paper">
+        <Box display="flex" alignItems="center" gap={1} className="chat-header">
+          <MessageCircle className="chat-icon" />
+          <Typography variant="h5" className="chat-title">
+            Chat
+          </Typography>
+        </Box>
 
-      <div className="messages-container">
-        {messages.map((message) => (
-          <MessageBubble key={message.id} message={message} />
-        ))}
-      </div>
+        <Box className="messages-container">
+          {messages.map((message) => (
+            <MessageBubble key={message.id} message={message} />
+          ))}
+        </Box>
 
-      <div className="input-area">
-        <div className="input-group">
-          <input
+        <Box display="flex" alignItems="center" gap={1} className="input-area">
+          <TextField
+            fullWidth
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyDown={handleKeyPress}
             placeholder="Type your message..."
+            variant="outlined"
             className="message-input"
           />
-          <button onClick={handleSend} className="send-button">
-            <Send className="w-5 h-5" />
-          </button>
-        </div>
-      </div>
-    </div>
+          <IconButton
+            onClick={handleSend}
+            color="primary"
+            className="send-button"
+          >
+            <Send color="black" className="send-icon" />
+          </IconButton>
+        </Box>
+      </Paper>
+    </Container>
   );
 };
 
