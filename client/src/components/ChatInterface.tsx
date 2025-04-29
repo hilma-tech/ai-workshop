@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { MessageCircle, Send } from "lucide-react";
 import MessageBubble from "./MessageBubble";
 import "../styles/chat.css";
-import axios from "axios"; // Import axios
+import axios from "axios";
 
 interface Message {
   id: number;
@@ -15,14 +15,16 @@ const ChatInterface = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
 
+  // Updated API_URL with /api prefix
+  const API_URL = "http://localhost:3000/api/messages"; // Added /api
+
   // Function to fetch messages from the backend
   const fetchMessages = async () => {
     try {
-      const response = await axios.get<Message[]>("/api/messages"); // Adjust URL as needed
-      // Format the timestamp to be a Date object
+      const response = await axios.get<Message[]>(API_URL);
       const formattedMessages = response.data.map((message) => ({
         ...message,
-        timestamp: new Date(message.timestamp),
+        timestamp: message.timestamp ? new Date(message.timestamp) : new Date(),
       }));
       setMessages(formattedMessages);
     } catch (error) {
@@ -30,26 +32,67 @@ const ChatInterface = () => {
     }
   };
 
-  // Fetch messages when the component mounts
-  useEffect(() => {
-    fetchMessages();
-  }, []); // Empty dependency array means this effect runs once on mount
-
-  const handleSend = () => {
-    if (newMessage.trim()) {
-      // This part currently adds the message to the local state.
-      // For a full implementation, you would also send this message to the backend here.
+  // Function to send a new message to the backend
+  const sendMessage = async (text: string) => {
+    try {
+      const response = await axios.post<Message>(API_URL, {
+        text: text,
+        isSent: true,
+      });
       setMessages([
         ...messages,
         {
-          id: messages.length + 1, // This ID is temporary; backend should assign the final ID
-          text: newMessage,
-          isSent: true, // Assuming messages sent from the client are 'isSent: true'
-          timestamp: new Date(),
+          ...response.data,
+          timestamp: new Date(response.data.timestamp),
         },
       ]);
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
+
+  // Function to send updated message to the backend AND update local state
+  const updateMessage = async (id: number, newText: string) => {
+    try {
+      const response = await axios.patch<Message>(`${API_URL}/${id}`, {
+        text: newText,
+      });
+      setMessages(
+        messages.map((message) =>
+          message.id === id
+            ? {
+                ...response.data,
+                timestamp: new Date(response.data.timestamp),
+              }
+            : message
+        )
+      );
+    } catch (error) {
+      console.error(`Error updating message with ID ${id}:`, error);
+    }
+  };
+
+  // New function to delete a message and update local state
+  const deleteMessage = async (id: number) => {
+    try {
+      await axios.delete(`${API_URL}/${id}`);
+      // Filter out the deleted message from the local state
+      setMessages(messages.filter((message) => message.id !== id));
+    } catch (error) {
+      console.error(`Error deleting message with ID ${id}:`, error);
+      // Optionally, handle error in UI
+    }
+  };
+
+  // Fetch messages when the component mounts
+  useEffect(() => {
+    fetchMessages();
+  }, []);
+
+  const handleSend = () => {
+    if (newMessage.trim()) {
+      sendMessage(newMessage);
       setNewMessage("");
-      // TODO: Add logic here to send the new message to your NestJS backend
     }
   };
 
@@ -69,7 +112,13 @@ const ChatInterface = () => {
 
       <div className="messages-container">
         {messages.map((message) => (
-          <MessageBubble key={message.id} message={message} />
+          // Pass the updateMessage AND deleteMessage functions as props
+          <MessageBubble
+            key={message.id}
+            message={message}
+            onUpdateMessage={updateMessage}
+            onDeleteMessage={deleteMessage} // Pass the delete function
+          />
         ))}
       </div>
 
