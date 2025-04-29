@@ -41,8 +41,12 @@ const ChatInterface = () => {
     setMessages: React.Dispatch<React.SetStateAction<Message[]>>
   ) => {
     try {
-      const response = await axios.get("https://your-api-endpoint/messages"); // Replace with your actual API URL
-      setMessages(response.data);
+      const response = await axios.get("/api/message");
+      const parsedMessages = response.data.map((msg: any) => ({
+        ...msg,
+        timestamp: new Date(msg.timestamp), // Ensure timestamp is a Date object
+      }));
+      setMessages(parsedMessages);
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
