@@ -16,6 +16,6 @@ export class Message {
   @Column()
   isSent: boolean;
 
-  @CreateDateColumn({})
+  @CreateDateColumn()
   timestamp: Date;
 }

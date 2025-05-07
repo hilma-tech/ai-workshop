@@ -1,9 +1,10 @@
-import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { getOptions } from "./data-source";
 import { LoggerMiddleware } from "./logger/logger.middleware";
-import { MessageModule } from './message/message.module';
+import { MessageModule } from "./message/message.module";
+import { DataSource } from "typeorm"; // Import DataSource
 
 @Module({
   imports: [
@@ -20,8 +21,6 @@ import { MessageModule } from './message/message.module';
   controllers: [],
   providers: [],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes("*");
-  }
+export class AppModule {
+  constructor(private dataSource: DataSource) {}
 }
