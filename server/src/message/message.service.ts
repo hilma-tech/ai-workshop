@@ -9,4 +9,7 @@ export class MessageService {
     @InjectRepository(Message)
     private readonly messageRepository: Repository<Message>
   ) {}
+  logMessage(text: string) {
+    console.log("Received message from client:", text);
+  }
 }

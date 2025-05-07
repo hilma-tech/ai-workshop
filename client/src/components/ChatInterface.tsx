@@ -14,6 +14,27 @@ const ChatInterface = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
 
+  const sendMessageToServer = async (text: string) => {
+    try {
+      const response = await fetch("http://localhost:3000/api/message", {
+        // Replace with your server URL
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text }),
+      });
+
+      if (!response.ok) {
+        console.error(`HTTP error! status: ${response.status}`);
+      } else {
+        console.log("Message sent to server successfully!");
+      }
+    } catch (error) {
+      console.error("There was an error sending the message:", error);
+    }
+  };
+
   const handleSend = () => {
     if (newMessage.trim()) {
       setMessages([
@@ -25,6 +46,7 @@ const ChatInterface = () => {
           timestamp: new Date(),
         },
       ]);
+      sendMessageToServer(newMessage); // Send the message to the server
       setNewMessage("");
     }
   };
