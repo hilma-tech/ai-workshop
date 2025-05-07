@@ -1,13 +1,12 @@
 import { Controller, Get, Post, Body } from "@nestjs/common";
 import { MessageService } from "./message.service";
-import { Message } from "src/entities/message.entity";
 
 interface CreateMessageDto {
   text: string;
   isSent: boolean;
 }
 
-@Controller("message") // Changed to 'message'
+@Controller("api/message") //  <---  Check this!
 export class MessageController {
   constructor(private readonly messageService: MessageService) {}
 
