@@ -3,7 +3,7 @@ import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { getOptions } from "./data-source";
 import { LoggerMiddleware } from "./logger/logger.middleware";
-import { MessageModule } from './message/message.module';
+import { MessageModule } from "./message/message.module";
 
 @Module({
   imports: [

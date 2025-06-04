@@ -30,11 +30,10 @@ const ChatInterface = () => {
       setMessages((prev) => [...prev, savedMessage]);
       setNewMessage("");
 
-      setTimeout(async () => {
-        const replyText = `Echo: ${newMessage}`;
-        const botMessage = await saveMessage(replyText, false);
-        setMessages((prev) => [...prev, botMessage]);
-      }, 1000);
+      //TODO replace echo with a real response
+      const replyText = `Echo: ${newMessage}`;
+      const botMessage = await saveMessage(replyText, false);
+      setMessages((prev) => [...prev, botMessage]);
     }
   };
 

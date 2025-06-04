@@ -2,12 +2,14 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Message } from "../entities/message.entity";
+import { LlmService } from "src/llm/llm.service";
 
 @Injectable()
 export class MessageService {
   constructor(
     @InjectRepository(Message)
-    private messageRepository: Repository<Message>
+    private messageRepository: Repository<Message>,
+    private readonly llmService: LlmService
   ) {}
 
   async saveMessage(text: string, isSent: boolean): Promise<Message> {
