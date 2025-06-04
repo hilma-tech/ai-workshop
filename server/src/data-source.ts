@@ -6,24 +6,20 @@ import { DataSource, DataSourceOptions } from "typeorm";
 export function getOptions(): DataSourceOptions {
   return {
     type: "mysql",
-    host: process.env.host,
+    host: process.env.DB_HOST,
     port: Number(process.env.DB_PORT),
-    database: process.env.DB_NAME,
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    logging: process.env.TYPEORM_LOGGING?.toLowerCase() === "on",
+    database: process.env.DB_NAME,
     synchronize: process.env.TYPEORM_SYNC?.toLowerCase() === "on",
-
+    logging: process.env.TYPEORM_LOGGING?.toLowerCase() === "on",
     ssl: process.env.DB_SSL
       ? {
           cert: readFileSync(process.env.DB_SSL),
         }
       : undefined,
-
-    migrations: ["dist/migrations/*.migration{.ts,.js}"],
-    migrationsRun: true,
-
-    entities: ["dist/**/*.entity{.ts,.js}"],
+    migrations: [join(__dirname, "**", "*.migration.js")],
+    entities: [join(__dirname, "**", "*.entity.js")],
   };
 }
 

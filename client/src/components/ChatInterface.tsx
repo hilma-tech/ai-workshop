@@ -1,7 +1,12 @@
-import React, { useState } from "react";
-import { MessageCircle, Send } from "lucide-react";
-import MessageBubble from "./MessageBubble";
+import React, { useState, useEffect } from "react";
+import { MessageCircle, Send, Edit, Check } from "lucide-react";
+import {
+  getMessages,
+  sendMessage as saveMessage,
+  updateMessage,
+} from "../api/message.ts";
 import "../styles/chat.css";
+import { formatTimestamp } from "./MessageBubble.tsx";
 
 interface Message {
   id: number;
@@ -9,24 +14,42 @@ interface Message {
   isSent: boolean;
   timestamp: Date;
 }
-
 const ChatInterface = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
+  const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
+  const [editText, setEditText] = useState("");
 
-  const handleSend = () => {
+  useEffect(() => {
+    getMessages().then(setMessages);
+  }, []);
+
+  const handleSend = async () => {
     if (newMessage.trim()) {
-      setMessages([
-        ...messages,
-        {
-          id: messages.length + 1,
-          text: newMessage,
-          isSent: true,
-          timestamp: new Date(),
-        },
-      ]);
+      const savedMessage = await saveMessage(newMessage, true);
+      setMessages((prev) => [...prev, savedMessage]);
       setNewMessage("");
+
+      setTimeout(async () => {
+        const replyText = `Echo: ${newMessage}`;
+        const botMessage = await saveMessage(replyText, false);
+        setMessages((prev) => [...prev, botMessage]);
+      }, 1000);
     }
+  };
+
+  const handleEdit = (id: number, text: string) => {
+    setEditingMessageId(id);
+    setEditText(text);
+  };
+
+  const handleSaveEdit = async (id: number) => {
+    const updated = await updateMessage(id, editText);
+    setMessages((prev) =>
+      prev.map((msg) => (msg.id === id ? { ...msg, text: updated.text } : msg))
+    );
+    setEditingMessageId(null);
+    setEditText("");
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -45,7 +68,39 @@ const ChatInterface = () => {
 
       <div className="messages-container">
         {messages.map((message) => (
-          <MessageBubble key={message.id} message={message} />
+          <div
+            key={message.id}
+            className={`message-bubble ${message.isSent ? "sent" : "received"}`}
+          >
+            {editingMessageId === message.id ? (
+              <div className="edit-container">
+                <input
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                  className="edit-input"
+                />
+                <button
+                  onClick={() => handleSaveEdit(message.id)}
+                  className="save-edit-btn"
+                >
+                  <Check size={16} />
+                </button>
+              </div>
+            ) : (
+              <>
+                <p>{message.text}</p>
+                {message.isSent && (
+                  <button
+                    onClick={() => handleEdit(message.id, message.text)}
+                    className="edit-button"
+                    title="Edit message"
+                  >
+                    <Edit size={14} />
+                  </button>
+                )}
+              </>
+            )}
+          </div>
         ))}
       </div>
 
