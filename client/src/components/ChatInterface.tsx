@@ -6,7 +6,7 @@ import {
   updateMessage,
 } from "../api/message.ts";
 import "../styles/chat.css";
-import { formatTimestamp } from "./MessageBubble.tsx";
+// import { formatTimestamp } from "./MessageBubble.tsx";
 
 interface Message {
   id: number;
