@@ -15,16 +15,13 @@ export class LlmService {
 
   async callOpenAI({
     systemPrompt,
-    previousMessages,
     input,
   }: {
     systemPrompt: string;
-    previousMessages?: ChatCompletionMessageParam[];
     input: string;
   }) {
     try {
       const messages: ChatCompletionMessageParam[] = [
-        ...previousMessages,
         {
           role: "system",
           content: systemPrompt,

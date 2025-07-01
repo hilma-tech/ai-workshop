@@ -1,9 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { getOptions } from "./data-source";
 import { LoggerMiddleware } from "./logger/logger.middleware";
-import { MessageModule } from "./message/message.module";
+import { StoryModule } from "./story/story.module";
 
 @Module({
   imports: [
@@ -14,8 +12,7 @@ import { MessageModule } from "./message/message.module";
         `.env.${process.env.NODE_ENV}.local`,
       ],
     }),
-    TypeOrmModule.forRootAsync({ useFactory: getOptions }),
-    MessageModule,
+    StoryModule,
   ],
   controllers: [],
   providers: [],
