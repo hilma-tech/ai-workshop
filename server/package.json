@@ -9,6 +9,7 @@
     "build": "export NODE_ENV=production && nest build",
     "start": "export NODE_ENV=production && nest start",
     "start:dev": "export NODE_ENV=development && nest start --watch",
+    "dev": "export NODE_ENV=development && nest start --watch",
     "start:debug": "export NODE_ENV=debug && nest start --debug --watch",
     "start:prod": "export NODE_ENV=production && node dist/main",
     "migration:generate": "export MIGRATION=on && typeorm-ts-node-commonjs migration:generate -d ./src/data-source.ts",
