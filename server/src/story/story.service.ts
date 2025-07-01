@@ -1,4 +1,4 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { DEFAULT_SYSTEM_PROMPT } from "src/common/system-prompts/DefaultSystemPrompt";
 import { LlmService } from "src/llm/llm.service";
 import { CreateStoryDTO } from "./dto/create-story.dto";
